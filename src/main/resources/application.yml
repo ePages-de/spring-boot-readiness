@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: 'spring-boot-readiness'
+  profiles:
+    include: ${platform}
+  main:
+    banner-mode: 'CONSOLE'
+    web-environment: true
+  output:
+    ansi:
+      enabled: 'ALWAYS'
+
+server:
+  port: 2112
+
+management:
+  port: 2113
+  security:
+    enabled: false
+  health:
+    diskspace:
+      enabled: false
+
+endpoints:
+  health:
+    sensitive: false
+    path: '/readiness'
+
+logging:
+  level:
+    root: 'INFO'
+
+readiness:
+  platform: ${platform}

@@ -1,0 +1,27 @@
+spring:
+  main:
+    banner-mode: 'OFF'
+    web-environment: false
+
+logging:
+  level:
+    root: 'WARN'
+    com.epages.readiness: 'DEBUG'
+    org.springframework: 'WARN'
+    org.springframework.beans.factory.support: 'INFO'
+    org.springframework.boot.autoconfigure.logging: 'INFO'
+
+readiness:
+  services:
+    - service: 'up'
+      uri: 'https://host.invalid/UP'
+    - service: 'down'
+      uri: 'https://host.invalid/DOWN'
+    - service: 'out-of-service'
+      uri: 'https://host.invalid/OUT_OF_SERVICE'
+    - service: 'unknown'
+      uri: 'https://host.invalid/UNKNOWN'
+    - service: 'custom'
+      uri: 'https://host.invalid/CUSTOM'
+    - service: 'exception'
+      uri: 'https://host.invalid/EXCEPTION'

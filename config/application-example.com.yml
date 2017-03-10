@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    # for accepting the self-signed SSL certificate
+    include: 'insecure'
+
+readiness:
+  connectionTimeout: 100
+  readTimeout: 200
+  connectionRequestTimeout: 500
+  services:
+    - service: 'users'
+      uri: 'https://example.com/users/health.json'
+    - service: 'items'
+      uri: 'https://example.com/items/health.json'

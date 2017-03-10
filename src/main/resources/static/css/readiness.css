@@ -1,0 +1,28 @@
+.navbar {
+    margin-bottom: 50px;
+}
+
+.label {
+    margin: 5px;
+    padding: 3px;
+    height: 100px;
+    width: 250px;
+    border-radius: .5em;
+    box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.5);
+}
+
+.jumbotron.up {
+    background-color: rgba(92, 184, 92, 0.5) !important;
+    box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.5);
+}
+
+.jumbotron.down {
+    background-color: rgba(217, 83, 79, 0.5) !important;
+    box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.5);
+}
+
+.popover {
+   min-width: 50px;
+   //width: 100%;
+   max-width: 500px;
+}

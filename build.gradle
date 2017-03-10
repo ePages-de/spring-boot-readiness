@@ -1,0 +1,46 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.2.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+jar {
+    baseName = "${rootProject.name}"
+    version = 'DEV-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+    compile('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
+    compile('org.apache.httpcomponents:httpclient')
+    compile('com.google.guava:guava:21.0')
+    compileOnly('org.projectlombok:lombok')
+    runtime('org.webjars:webjars-locator')
+    runtime('org.webjars:bootstrap:3.3.7-1')
+    runtime('org.webjars:jquery:3.1.1-1')
+    runtime('org.springframework.boot:spring-boot-devtools')
+
+    testCompile('junit:junit')
+    testCompile('org.assertj:assertj-core:3.4.1')
+    testCompile('org.mockito:mockito-core')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompileOnly('org.projectlombok:lombok')
+}

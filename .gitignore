@@ -1,0 +1,11 @@
+build/
+bin/
+.*
+gradle.properties
+.idea/
+*.iml
+*.ipr
+*.iws
+_ajdump
+lib/*.jar
+out/

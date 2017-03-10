@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" packagingData="false" scan="false" scanPeriod="30 seconds">
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <root level="${LOGGING_LEVEL_ROOT}">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

@@ -1,0 +1,16 @@
+spring:
+  main:
+    banner-mode: 'OFF'
+    web-environment: false
+
+management:
+  port: -1
+
+logging:
+  pattern:
+    console: '%m%n'
+  level:
+    root: 'OFF'
+    yaml: 'INFO'
+    com.epages.readiness: 'INFO'
+    com.epages.readiness.ReadinessApplication: 'WARN'

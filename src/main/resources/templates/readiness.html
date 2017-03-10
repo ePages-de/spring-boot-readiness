@@ -1,0 +1,88 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Platform Readiness Check</title>
+    <meta http-equiv="refresh" th:attr="content=${param.refresh[0]}" th:unless="${param.refresh == null}"/>
+    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="/css/readiness.css"/>
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body role="document">
+
+<!--@thymesVar id="readiness" type="com.epages.readiness.ReadinessResponse"-->
+<header>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <div class="navbar-brand">
+                    <span class="glyphicon" th:classappend="${readiness.status.code == 'UP'} ? 'glyphicon-ok text-success' : 'glyphicon-remove text-danger'"></span>
+                    <tt th:text="${readiness.platform}">platform</tt>
+                    <small>(<span th:text="${readiness.totalTimeMillis}">1234</span> ms)</small>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container" style="margin-top: 60px;">
+    <div class="jumbotron" th:classappend="${#strings.toLowerCase(readiness.status.code)}">
+        <div class="container">
+            <div class="row">
+                <div th:each="child : ${readiness.children}" th:with="health=${child.value}" class="col-md-2 label"
+                     th:classappend="${health.status.code == 'UP'} ? label-success : label-danger"
+                     data-toggle="popover"
+                     th:attr="data-popover-content=${'#popover-' + health.request.service}"
+                >
+                    <div class="hidden" th:attr="id=${'popover-' + health.request.service}">
+                        <div class="popover-heading">
+                            <span class="glyphicon" th:classappend="${health.status.code == 'UP'} ? 'glyphicon-ok text-success' : 'glyphicon-remove text-danger'"></span>
+                            <span th:text="${health.request.service}">name</span>
+                            <small>(<span th:text="${health.totalTimeMillis}">1234</span> ms)</small>
+                        </div>
+                        <div class="popover-body">
+                            <div th:each="childStatus : ${health.childrenStatus}">
+                                <span class="glyphicon" th:classappend="${childStatus.status == 'UP'} ? 'glyphicon-ok text-success' : 'glyphicon-remove text-danger'"></span>
+                                <span th:text="${childStatus.name}">name</span>
+                            </div>
+                            <div th:unless="${#strings.isEmpty(health.status.description)}">
+                                <span th:text="${health.status.description}">description</span>
+                            </div>
+                        </div>
+                    </div>
+                    <h4>
+                        <span th:text="${health.request.service}">service</span>
+                    </h4>
+                    <h2>
+                        <span class="glyphicon" th:classappend="${health.status.code == 'UP'} ? 'glyphicon-ok' : 'glyphicon-remove'"></span>
+                        <small>(<span th:text="${health.totalTimeMillis}">926</span> ms)</small>
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(function(){
+    $("[data-toggle=popover]").popover({
+        html: true,
+        trigger: "hover",
+        placement: "auto",
+        content: function() {
+          var content = $(this).attr("data-popover-content");
+          return $(content).children(".popover-body").html();
+        },
+        title: function() {
+          var title = $(this).attr("data-popover-content");
+          return $(title).children(".popover-heading").html();
+        }
+    });
+});
+</script>
+
+</body>
+</html>
