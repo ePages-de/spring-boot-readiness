@@ -3,9 +3,6 @@ spring:
     banner-mode: 'OFF'
     web-environment: false
 
-management:
-  port: -1
-
 logging:
   pattern:
     console: '%m%n'

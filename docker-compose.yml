@@ -26,7 +26,6 @@ dashboard:
     service: readiness
   ports:
     - "2112:2112"
-    - "2113:2113"
   volumes_from:
     - gradle
   environment:

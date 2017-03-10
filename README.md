@@ -5,7 +5,7 @@ to aggregate a combined readiness state. It includes a build process for creatin
 
 The app offers two modes of operation: command line interface (`cli`) or web interface (`dashboard`).
 In `cli` mode it prints out the readiness check results to the console as a YAML document.
-In `dashboard` mode it starts as a daemon and offers HTTP ports for HTML (port 2112) and REST (port 2113) access.
+In `dashboard` mode it starts as a daemon and offers an HTTP port (default: 2112) for HTML and JSON results.
 
 ## Configure target platform
 
@@ -60,10 +60,10 @@ $ open http://192.168.99.100:2112/readiness.html?refresh=5
 $ docker logs -f readiness_dashboard
 ```
 
-The REST endpoint returns a JSON document and can be accessed on a different port:
+The REST endpoint returns a JSON document and can be accessed using a different URI:
 
 ```
-$ http http://192.168.99.100:2113/readiness.json
+$ http http://192.168.99.100:2112/readiness.json
 HTTP/1.1 200 
 Content-Type: application/json;charset=UTF-8
 Date: Fri, 10 Mar 2017 08:57:06 GMT

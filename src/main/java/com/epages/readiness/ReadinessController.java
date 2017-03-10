@@ -12,7 +12,7 @@ public class ReadinessController {
 
     private final ReadinessClient readinessClient;
 
-    @GetMapping({"/", "/readiness"})
+    @GetMapping({"/", "/readiness.html"})
     public String readiness(Model model) {
         ReadinessResponse readiness = readinessClient.getReadiness();
         model.addAttribute("readiness", readiness);
