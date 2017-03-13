@@ -1,15 +1,5 @@
 package com.epages.readiness;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.mockito.BDDMockito.willReturn;
-import static org.springframework.boot.actuate.health.Status.UP;
-import static org.springframework.http.MediaType.TEXT_HTML;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.net.URI;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +11,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import lombok.SneakyThrows;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Matchers.anyObject;
+import static org.springframework.boot.actuate.health.Status.UP;
+import static org.springframework.http.MediaType.TEXT_HTML;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ReadinessController.class)
 @ActiveProfiles({"test", "dashboard"})
@@ -39,17 +38,20 @@ public class ReadinessControllerTest {
         // GIVEN
         HealthResponse health = HealthResponse.builder()
                 .status(UP)
-                .request(new HealthRequest("service", URI.create("http:s//host.invalid/UP")))
+                .request(new HealthRequest("service", "https://host.invalid/UP"))
                 .totalTimeMillis(1234L)
                 .build();
         ReadinessResponse readiness = ReadinessResponse.builder()
                 .platform("test platform")
-                .child("health", health)
+                .child(health)
                 .build();
-        willReturn(readiness).given(mockReadinessClient).getReadiness();
+        willReturn(readiness).given(mockReadinessClient).getReadiness(anyObject());
 
         // WHEN
-        ResultActions resultActions = mockMvc.perform(get("/").accept(TEXT_HTML));
+        ResultActions resultActions = mockMvc.perform(get(
+                "/readiness.html?refresh={refresh}&sort={sort1}&sort={sort2}&sort={sort3}",
+                5, "status,ASC", "totalTimeMillis,DESC", "service,ASC"
+        ).accept(TEXT_HTML));
 
         // THEN
         resultActions

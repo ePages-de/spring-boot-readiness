@@ -32,6 +32,8 @@ dependencies {
     compile('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
     compile('org.apache.httpcomponents:httpclient')
     compile('com.google.guava:guava:21.0')
+    compile('org.springframework.data:spring-data-commons')
+
     compileOnly('org.projectlombok:lombok')
     runtime('org.webjars:webjars-locator')
     runtime('org.webjars:bootstrap:3.3.7-1')
