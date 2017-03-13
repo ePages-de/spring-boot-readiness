@@ -1,15 +1,12 @@
 package com.epages.readiness;
 
-import static lombok.AccessLevel.PACKAGE;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.net.URI;
-import java.util.Comparator;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.google.common.annotations.VisibleForTesting;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,17 +14,17 @@ import lombok.ToString;
 
 @Data
 @ToString(of = {"service"})
-@NoArgsConstructor
-@AllArgsConstructor(access = PACKAGE, onConstructor = @__(@VisibleForTesting))
-public class HealthRequest implements Comparable<HealthRequest> {
+@NoArgsConstructor // for ReadinessSettings
+public class HealthRequest {
     @JsonIgnore
     private String service;
 
     @Getter(onMethod = @__(@JsonValue))
     private URI uri;
 
-    @Override
-    public int compareTo(HealthRequest that) {
-        return Comparator.comparing(HealthRequest::getService).compare(this, that);
+    @JsonCreator
+    public HealthRequest(@JsonProperty("service") String service, @JsonProperty("uri") String uri) {
+        this.service = service;
+        this.uri = URI.create(uri);
     }
 }

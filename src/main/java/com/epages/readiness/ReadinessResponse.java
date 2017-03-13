@@ -1,17 +1,22 @@
 package com.epages.readiness;
 
-import static org.springframework.boot.actuate.health.Status.DOWN;
-import static org.springframework.boot.actuate.health.Status.UP;
-
-import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.boot.actuate.health.Status;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Singular;
+
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
+import static org.springframework.boot.actuate.health.Status.DOWN;
+import static org.springframework.boot.actuate.health.Status.UP;
 
 @Getter
 @Builder
@@ -21,24 +26,27 @@ public class ReadinessResponse implements Response {
 
     private Long totalTimeMillis;
 
+    @JsonIgnore
     @Singular("child")
-    @Getter(onMethod = @__(@JsonAnyGetter))
-    private Map<String, Response> children;
+    private List<HealthResponse> children;
+
+    @JsonAnyGetter
+    public Map<String, HealthResponse> serializedChildren() {
+        return children.stream()
+                .collect(toMap(HealthResponse::getService, identity(), (first, second) -> second, LinkedHashMap::new));
+    }
 
     @Override
     public Status getStatus() {
-        boolean allUp = children.values().stream()
-                .map(Response::getStatus)
+        boolean allUp = children.stream()
+                .map(HealthResponse::getStatus)
                 .allMatch(UP::equals);
         return allUp ? UP : DOWN;
     }
 
     static class ReadinessResponseBuilder {
         ReadinessResponseBuilder combine(ReadinessResponseBuilder other) {
-            for (int i = 0; i < other.children$key.size(); i++) {
-                child(other.children$key.get(i), other.children$value.get(i));
-            }
-            return this;
+            return children(other.children);
         }
     }
 }

@@ -20,6 +20,7 @@ public class ReadinessHealthIndicator extends AbstractHealthIndicator {
                 .withDetail("platform", readiness.getPlatform())
                 .withDetail("totalTimeMillis", readiness.getTotalTimeMillis())
         ;
-        readiness.getChildren().forEach(builder::withDetail);
+        readiness.getChildren().forEach(healthResponse ->
+                builder.withDetail(healthResponse.getService(), healthResponse));
     }
 }

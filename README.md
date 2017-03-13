@@ -52,6 +52,19 @@ into the running Docker container as a volume. See `docker-compose.yml` how to d
 In `dashboard` mode you can view the combined readiness check result presented as a single HTML page.
 Append a query parameter `?refresh=5` to let your browser automatically refresh the output every 5 seconds.
 
+Sorting of underlying health check results is done by appending one or more query parameters `sort`. 
+Supported values are:
+
+* `&sort=service,ASC`
+* `&sort=service,DESC`
+* `&sort=status,ASC`
+* `&sort=status,DESC`
+* `&sort=totalTimeMillis,ASC`
+* `&sort=totalTimeMillis,DESC`
+
+Default sort direction is `&service,ASC`;
+if you omit the comma-separted direction it will default to `ASC`.
+
 You can use `docker-compose` to start the app for a specific target platform:
 
 ```
