@@ -11,6 +11,8 @@ import java.util.Comparator;
 
 import lombok.RequiredArgsConstructor;
 
+import static com.google.common.base.MoreObjects.firstNonNull;
+
 @Controller
 @RequiredArgsConstructor
 public class ReadinessController {
@@ -21,7 +23,7 @@ public class ReadinessController {
 
     @GetMapping({"/", "/readiness.html"})
     public String readiness(Model model, Sort sort) {
-        Comparator<HealthResponse> comparator = sortCompare.getComparator(sort);
+        Comparator<HealthResponse> comparator = sortCompare.getComparator(firstNonNull(sort, new Sort("service")));
         ReadinessResponse readiness = readinessClient.getReadiness(comparator);
         model.addAttribute("readiness", readiness);
         return "readiness";

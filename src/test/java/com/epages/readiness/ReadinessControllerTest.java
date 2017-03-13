@@ -34,18 +34,9 @@ public class ReadinessControllerTest {
 
     @Test
     @SneakyThrows
-    public void should_render_dashboard() {
+    public void should_render_dashboard_using_custom_sorting() {
         // GIVEN
-        HealthResponse health = HealthResponse.builder()
-                .status(UP)
-                .request(new HealthRequest("service", "https://host.invalid/UP"))
-                .totalTimeMillis(1234L)
-                .build();
-        ReadinessResponse readiness = ReadinessResponse.builder()
-                .platform("test platform")
-                .child(health)
-                .build();
-        willReturn(readiness).given(mockReadinessClient).getReadiness(anyObject());
+        givenReadinessResponse();
 
         // WHEN
         ResultActions resultActions = mockMvc.perform(get(
@@ -58,5 +49,34 @@ public class ReadinessControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(TEXT_HTML))
                 .andExpect(content().string(containsString("<tt>test platform</tt>")));
+    }
+
+    @Test
+    @SneakyThrows
+    public void should_render_dashboard_using_default_sorting() {
+        // GIVEN
+        givenReadinessResponse();
+
+        // WHEN
+        ResultActions resultActions = mockMvc.perform(get("/readiness.html").accept(TEXT_HTML));
+
+        // THEN
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(TEXT_HTML))
+                .andExpect(content().string(containsString("<tt>test platform</tt>")));
+    }
+
+    private void givenReadinessResponse() {
+        HealthResponse health = HealthResponse.builder()
+                .status(UP)
+                .request(new HealthRequest("service", "https://host.invalid/UP"))
+                .totalTimeMillis(1234L)
+                .build();
+        ReadinessResponse readiness = ReadinessResponse.builder()
+                .platform("test platform")
+                .child(health)
+                .build();
+        willReturn(readiness).given(mockReadinessClient).getReadiness(anyObject());
     }
 }
