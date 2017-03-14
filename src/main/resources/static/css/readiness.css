@@ -1,5 +1,9 @@
 .navbar {
-    margin-bottom: 50px;
+    height: 70px;
+}
+
+.content {
+    padding-top: 80px;
 }
 
 .label {

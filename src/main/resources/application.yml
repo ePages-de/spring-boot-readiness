@@ -10,6 +10,14 @@ spring:
     ansi:
       enabled: 'ALWAYS'
 
+banner:
+  image:
+    location: 'classpath:static/readiness-360x200.png'
+    width: 120
+    height: 50
+    margin: 0
+    invert: true
+
 server:
   port: 2112
 

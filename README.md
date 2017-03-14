@@ -62,7 +62,7 @@ Supported values are:
 * `&sort=totalTimeMillis,ASC`
 * `&sort=totalTimeMillis,DESC`
 
-Default sort direction is `&service,ASC`;
+Default sort direction is `&sort=service,ASC`;
 if you omit the comma-separted direction it will default to `ASC`.
 
 You can use `docker-compose` to start the app for a specific target platform:
