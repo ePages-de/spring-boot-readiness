@@ -36,7 +36,7 @@
     <div class="jumbotron" th:classappend="${#strings.toLowerCase(readiness.status.code)}">
         <div class="container">
             <div class="row">
-                <div th:each="health : ${readiness.children}" class="col-md-2 label"
+                <div th:each="health : ${readiness.children}" class="col-xs-2 col-md-2 col-lg-2 label"
                      th:classappend="${health.up} ? label-success : label-danger"
                      data-toggle="popover"
                      th:attr="data-popover-content=${'#popover-' + health.service}"
