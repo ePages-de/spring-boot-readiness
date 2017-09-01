@@ -35,6 +35,7 @@ dependencies {
     compile('org.springframework.data:spring-data-commons')
 
     compileOnly('org.projectlombok:lombok')
+    //compileOnly('org.projectlombok:lombok:1.16.18') // breaks Jackson deserialization of HealthResponse
     runtime('org.webjars:webjars-locator')
     runtime('org.webjars:bootstrap:3.3.7-1')
     runtime('org.webjars:jquery:3.1.1-1')

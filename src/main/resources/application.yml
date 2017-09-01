@@ -27,6 +27,9 @@ management:
   health:
     diskspace:
       enabled: false
+    status:
+      # introducing custom status "DEGRADED"
+      order: DOWN, OUT_OF_SERVICE, UNKNOWN, DEGRADED, UP
 
 endpoints:
   health:
