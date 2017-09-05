@@ -25,3 +25,5 @@ readiness:
       uri: 'https://host.invalid/CUSTOM'
     - service: 'exception'
       uri: 'https://host.invalid/EXCEPTION'
+    - service: 'degraded'
+      uri: 'https://host.invalid/DEGRADED'

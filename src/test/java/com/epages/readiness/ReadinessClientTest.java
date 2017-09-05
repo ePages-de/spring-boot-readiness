@@ -1,6 +1,7 @@
 package com.epages.readiness;
 
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.springframework.boot.actuate.health.Status.DOWN;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,6 +29,7 @@ public class ReadinessClientTest {
         ReadinessResponse response = readinessClient.getReadiness();
 
         // THEN
+        then(response.getStatus()).isEqualTo(DOWN);
         then(response.getChildren()).hasSize(settings.getServices().size());
     }
 }
