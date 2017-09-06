@@ -1,17 +1,21 @@
 package com.epages.readiness;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.springframework.boot.actuate.health.Status;
+import static com.google.common.collect.Maps.newLinkedHashMap;
+import static java.util.stream.Collectors.toList;
+import static lombok.AccessLevel.PRIVATE;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+
+import org.springframework.boot.actuate.health.Status;
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,11 +23,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Singular;
 import lombok.ToString;
-
-import static com.google.common.collect.Maps.newLinkedHashMap;
-import static java.util.stream.Collectors.toList;
-import static lombok.AccessLevel.PRIVATE;
-import static org.springframework.boot.actuate.health.Status.UP;
 
 @Getter
 @Builder(toBuilder = true)
@@ -66,7 +65,7 @@ public class HealthResponse implements Response {
 
     @Getter
     @RequiredArgsConstructor
-    static class ChildStatus {
+    static class ChildStatus implements StatusCheck {
         private final String name;
 
         private final Status status;
@@ -85,10 +84,6 @@ public class HealthResponse implements Response {
 
         ChildStatus(String name, String status) {
             this(name, new Status(status));
-        }
-
-        public boolean isUp() {
-            return UP.equals(status);
         }
     }
 }

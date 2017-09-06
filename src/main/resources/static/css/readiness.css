@@ -24,6 +24,10 @@
     background-color: rgba(92, 184, 92, 0.5) !important;
 }
 
+.jumbotron.degraded {
+    background-color: rgba(240, 173, 78, 0.5) !important;
+}
+
 .popover {
    min-width: 50px;
    max-width: 500px;

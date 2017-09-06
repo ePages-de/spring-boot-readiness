@@ -24,7 +24,7 @@
                     <a href="#"><img src="/readiness-360x200.png" height="50" /></a>
                     <tt th:text="${readiness.platform}">platform</tt>
                     <span class="glyphicon"
-                          th:classappend="${readiness.up} ? 'glyphicon-ok text-success' : 'glyphicon-remove text-danger'"></span>
+                          th:classappend="|${readiness.glyphIcon} ${'text-' + readiness.cssClass}|"></span>
                     <small>(<span th:text="${readiness.totalTimeMillis}">1234</span> ms)</small>
                 </div>
             </div>
@@ -37,14 +37,14 @@
         <div class="container">
             <div class="row">
                 <div th:each="health : ${readiness.children}" class="col-xs-2 col-md-2 col-lg-2 label"
-                     th:classappend="${health.up} ? label-success : label-danger"
+                     th:classappend="${'label-' + health.cssClass}"
                      data-toggle="popover"
                      th:attr="data-popover-content=${'#popover-' + health.service}"
                 >
                     <div class="hidden" th:attr="id=${'popover-' + health.service}">
                         <div class="popover-heading">
                             <span class="glyphicon"
-                                  th:classappend="${health.up} ? 'glyphicon-ok text-success' : 'glyphicon-remove text-danger'"></span>
+                                  th:classappend="| ${'text-' + health.cssClass} ${health.glyphIcon}|"></span>
                             <span th:text="${health.service}">name</span>
                             <small>(<span th:text="${health.totalTimeMillis}">1234</span> ms)
                             </small>
@@ -52,7 +52,7 @@
                         <div class="popover-body">
                             <div th:each="childStatus : ${health.childrenStatus}">
                                 <span class="glyphicon"
-                                      th:classappend="${childStatus.up} ? 'glyphicon-ok text-success' : 'glyphicon-remove text-danger'"></span>
+                                      th:classappend="|${childStatus.glyphIcon} ${'text-' + childStatus.cssClass}|"></span>
                                 <span th:text="${childStatus.name}">name</span>
                             </div>
                             <div th:unless="${#strings.isEmpty(health.status.description)}">
@@ -65,7 +65,7 @@
                     </h4>
                     <h2>
                         <span class="glyphicon"
-                              th:classappend="${health.up} ? 'glyphicon-ok' : 'glyphicon-remove'"></span>
+                              th:classappend="${health.glyphIcon}"></span>
                         <small>(<span th:text="${health.totalTimeMillis}">926</span> ms)</small>
                     </h2>
                 </div>
