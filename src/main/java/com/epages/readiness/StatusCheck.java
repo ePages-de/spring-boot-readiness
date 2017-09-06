@@ -1,7 +1,5 @@
 package com.epages.readiness;
 
-import static org.springframework.boot.actuate.health.Status.UP;
-
 import org.springframework.boot.actuate.health.Status;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,11 +9,6 @@ public interface StatusCheck {
 
     @JsonUnwrapped
     Status getStatus();
-
-    @JsonIgnore
-    default boolean isUp() {
-        return UP.equals(getStatus());
-    }
 
     @JsonIgnore
     default String getCssClass() {
