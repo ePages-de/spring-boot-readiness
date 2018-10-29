@@ -3,11 +3,9 @@ package com.epages.readiness;
 import org.springframework.boot.actuate.health.Status;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 public interface StatusCheck {
 
-    @JsonUnwrapped
     Status getStatus();
 
     @JsonIgnore

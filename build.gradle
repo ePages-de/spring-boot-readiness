@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.2.RELEASE'
+        springBootVersion = '2.0.6.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -14,6 +14,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 jar {
     baseName = "${rootProject.name}"
@@ -35,9 +36,8 @@ dependencies {
     compile('com.google.guava:guava:21.0')
     compile('org.springframework.data:spring-data-commons')
 
-    compileOnly('org.projectlombok:lombok')
-    //compileOnly('org.projectlombok:lombok:1.16.18') // breaks Jackson deserialization of HealthResponse
-    runtime('org.webjars:webjars-locator')
+    compileOnly('org.projectlombok:lombok:1.18.2')
+    runtime('org.webjars:webjars-locator:0.34')
     runtime('org.webjars:bootstrap:3.3.7-1')
     runtime('org.webjars:jquery:3.1.1-1')
     runtime('org.springframework.boot:spring-boot-devtools')
@@ -46,7 +46,7 @@ dependencies {
     testCompile('org.assertj:assertj-core:3.4.1')
     testCompile('org.mockito:mockito-core')
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompileOnly('org.projectlombok:lombok')
+    testCompileOnly('org.projectlombok:lombok:1.18.2')
 }
 
 bootRun {

@@ -1,11 +1,11 @@
 package com.epages.readiness;
 
+import java.net.URI;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-
-import java.net.URI;
 
 import lombok.Data;
 import lombok.Getter;

@@ -14,7 +14,7 @@ import com.google.common.collect.Iterables;
 class MockRestTemplateAnswer implements Answer {
     @Override
     public HealthResponse answer(InvocationOnMock invocation) {
-        URI uri = invocation.getArgumentAt(0, URI.class);
+        URI uri = invocation.getArgument(0);
         List<String> pathSegments = UriComponentsBuilder.fromUri(uri).build().getPathSegments();
         String status = Iterables.getLast(pathSegments);
         if ("EXCEPTION".equals(status)) {
