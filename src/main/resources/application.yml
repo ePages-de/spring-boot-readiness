@@ -30,11 +30,10 @@ management:
     status:
       # introducing custom status "DEGRADED"
       order: DOWN, OUT_OF_SERVICE, UNKNOWN, DEGRADED, UP
+  endpoint:
+    health:
+      show-details: always
 
-endpoints:
-  health:
-    sensitive: false
-    path: '/readiness'
 
 logging:
   level:
