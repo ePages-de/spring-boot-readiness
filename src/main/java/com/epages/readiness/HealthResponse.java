@@ -1,6 +1,7 @@
 package com.epages.readiness;
 
 import static com.google.common.collect.Maps.newLinkedHashMap;
+import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toList;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -11,8 +12,6 @@ import java.util.Optional;
 
 import org.springframework.boot.actuate.health.Status;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,7 +20,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Singular;
 import lombok.ToString;
 
 @Getter
@@ -42,23 +40,21 @@ public class HealthResponse implements Response {
         return request.getService();
     }
 
-    @Singular
-    @Getter(onMethod = @__(@JsonAnyGetter))
-    private Map<String, Object> children = newLinkedHashMap();
+    @Builder.Default
+    private Map<String, Object> details = newLinkedHashMap();
 
     @JsonCreator
-    public HealthResponse(@JsonProperty("status") String status) {
+    public HealthResponse(
+            @JsonProperty("status") String status,
+            @JsonProperty("details") Map<String, Object> details) {
         this.status = new Status(status);
-    }
-
-    @JsonAnySetter
-    public void addChild(String name, Object child) {
-        children.put(name, child);
+        this.details = details == null ? emptyMap() : details;
     }
 
     @JsonIgnore
+    @SuppressWarnings("unchecked")
     public List<ChildStatus> getChildrenStatus() {
-        return children.entrySet().stream()
+        return details.entrySet().stream()
                 .map(ChildStatus::new)
                 .collect(toList());
     }

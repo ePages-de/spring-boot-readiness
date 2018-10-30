@@ -3,8 +3,9 @@
 
 <head>
     <title>Platform Readiness Check</title>
-    <meta http-equiv="refresh" th:attr="content=${param.refresh[0]}"
-          th:unless="${param.refresh == null}"/>
+    <!--@thymesVar id="refresh" type="Integer"-->
+    <meta http-equiv="refresh" th:attr="content=${refresh}"
+          th:unless="${refresh == null}"/>
     <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap-theme.min.css"/>
