@@ -1,4 +1,4 @@
-FROM frekele/gradle:3.4.1-jdk8u121
+FROM frekele/gradle:4.8-jdk8u172
 
 ENV PROJECT=spring-boot-readiness
 
