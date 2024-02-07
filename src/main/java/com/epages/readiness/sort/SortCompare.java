@@ -7,8 +7,7 @@ import org.springframework.util.comparator.CompoundComparator;
 
 import java.util.Comparator;
 
-import javax.validation.constraints.NotNull;
-
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -19,9 +18,10 @@ public class SortCompare {
 
     private final OrderCompare orderCompare;
 
-    public Comparator<HealthResponse> getComparator(@NotNull Sort sort) {
+    public Comparator<HealthResponse> getComparator(@NonNull Sort sort) {
         return stream(checkNotNull(sort).spliterator(), false)
                 .map(orderCompare)
-                .collect(CompoundComparator::new, CompoundComparator::addComparator, CompoundComparator::addComparator);
+                .reduce(Comparator::thenComparing)
+                .orElse((t1, t2) -> 0);
     }
 }

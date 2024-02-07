@@ -2,6 +2,7 @@ package com.epages.readiness;
 
 import java.util.Comparator;
 
+import lombok.NonNull;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,11 @@ public class ReadinessController {
     private final SortCompare sortCompare;
 
     @GetMapping({"/", "/readiness.html"})
-    public String readiness(Model model, @SortDefault("service") Sort sort, @RequestParam(value = "refresh", required = false) Integer refreshInterval) {
+    public String readiness(
+        @NonNull Model model,
+        @SortDefault("service") Sort sort,
+        @RequestParam(value = "refresh", required = false) Integer refreshInterval
+    ) {
         Comparator<HealthResponse> comparator = sortCompare.getComparator(sort);
         ReadinessResponse readiness = readinessClient.getReadiness(comparator);
         model.addAttribute("readiness", readiness);

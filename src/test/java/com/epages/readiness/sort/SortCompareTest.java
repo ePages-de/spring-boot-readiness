@@ -33,10 +33,8 @@ public class SortCompareTest {
     @Test
     public void should_sort_health_responses() {
         // GIVEN
-        Sort sort = new Sort(
-                new Order(ASC, "status"),
-                new Order(DESC, "totalTimeMillis"),
-                new Order(ASC, "service")
+        Sort sort = Sort.by(
+            new Order(ASC, "status"), new Order(DESC, "totalTimeMillis"), new Order(ASC, "service")
         );
 
         // WHEN

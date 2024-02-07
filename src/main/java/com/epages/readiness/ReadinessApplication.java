@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.actuate.health.SimpleStatusAggregator;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -28,5 +29,10 @@ public class ReadinessApplication {
             ReadinessResponse readiness = readinessClient.getReadiness();
             log.info(new YAMLMapper().writeValueAsString(ImmutableMap.of("readiness", readiness)));
         };
+    }
+
+    @Bean
+    public SimpleStatusAggregator healthAggregator() {
+        return new SimpleStatusAggregator();
     }
 }
