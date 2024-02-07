@@ -52,34 +52,29 @@ public class HealthResponse implements Response {
     }
 
     @JsonIgnore
-    @SuppressWarnings("unchecked")
     public List<ChildStatus> getChildrenStatus() {
         return details.entrySet().stream()
-                .map(ChildStatus::new)
-                .collect(toList());
+                .map(ChildStatus::from)
+                .toList();
     }
 
     @Getter
     @RequiredArgsConstructor
-    static class ChildStatus implements StatusCheck {
+    public static class ChildStatus implements StatusCheck {
         private final String name;
 
         private final Status status;
 
-        ChildStatus(Entry<String, Object> entry) {
-            this(entry.getKey(), entry.getValue());
-        }
-
-        ChildStatus(String name, Object object) {
-            this(name, (object instanceof Map ? Optional.of((Map) object) : Optional.empty()));
-        }
-
-        ChildStatus(String name, Optional<Map> optionalMap) {
-            this(name, optionalMap.map(map -> map.get("status")).orElse("custom").toString());
-        }
-
-        ChildStatus(String name, String status) {
+        private ChildStatus(String name, String status) {
             this(name, new Status(status));
+        }
+
+        public static ChildStatus from(Entry<String, Object> entry) {
+            if (entry.getValue() instanceof Map<?, ?> map) {
+                return new ChildStatus(entry.getKey(), map.get("status").toString());
+            }
+
+            return new ChildStatus(entry.getKey(), "custom");
         }
     }
 }

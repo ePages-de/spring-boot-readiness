@@ -11,7 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.google.common.collect.Iterables;
 
-class MockRestTemplateAnswer implements Answer {
+class MockRestTemplateAnswer implements Answer<HealthResponse> {
     @Override
     public HealthResponse answer(InvocationOnMock invocation) {
         URI uri = invocation.getArgument(0);

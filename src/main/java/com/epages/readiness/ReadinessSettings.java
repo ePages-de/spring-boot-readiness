@@ -11,7 +11,6 @@ import lombok.Data;
 @Data
 @ConfigurationProperties(prefix = "readiness")
 public class ReadinessSettings {
-
     private String platform;
 
     private List<HealthRequest> services = newArrayList();
@@ -21,5 +20,4 @@ public class ReadinessSettings {
     private int readTimeout = 5_000;
 
     private int connectionRequestTimeout = 5_000;
-
 }

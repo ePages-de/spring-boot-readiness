@@ -10,25 +10,19 @@ public interface StatusCheck {
 
     @JsonIgnore
     default String getCssClass() {
-        switch (getStatus().getCode()) {
-            case "UP":
-                return "success";
-            case "DEGRADED":
-                return "warning";
-            default:
-                return "danger";
-        }
+        return switch (getStatus().getCode()) {
+            case "UP" -> "success";
+            case "DEGRADED" -> "warning";
+            default -> "danger";
+        };
     }
 
     @JsonIgnore
     default String getGlyphIcon() {
-        switch (getStatus().getCode()) {
-            case "UP":
-                return "glyphicon-ok";
-            case "DEGRADED":
-                return "glyphicon-warning-sign";
-            default:
-                return "glyphicon-remove";
-        }
+        return switch (getStatus().getCode()) {
+            case "UP" -> "glyphicon-ok";
+            case "DEGRADED" -> "glyphicon-warning-sign";
+            default -> "glyphicon-remove";
+        };
     }
 }

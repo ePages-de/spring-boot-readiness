@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-class MockRestTemplateRule extends ExternalResource {
+public class MockRestTemplateRule extends ExternalResource {
 
     private final RestTemplate mockRestTemplate;
 

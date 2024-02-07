@@ -14,13 +14,15 @@ import static org.springframework.boot.actuate.health.Status.UP;
 
 public class StatusComparator implements Comparator<Status> {
 
-    private final List<Status> statusOrder = ImmutableList.of(DOWN, OUT_OF_SERVICE, UNKNOWN, UP);
+    private final List<Status> statusOrder = List.of(DOWN, OUT_OF_SERVICE, UNKNOWN, UP);
 
     @Override
     public int compare(Status first, Status second) {
         int firstIndex = this.statusOrder.indexOf(first);
         int secondIndex = this.statusOrder.indexOf(second);
-        return (firstIndex < secondIndex ? -1 :
-                (firstIndex == secondIndex ? first.getCode().compareTo(second.getCode()) : 1));
+        if (firstIndex == secondIndex)
+            return first.getCode().compareTo(second.getCode());
+
+        return firstIndex < secondIndex ? -1 : 1;
     }
 }

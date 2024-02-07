@@ -6,7 +6,6 @@ import org.springframework.web.client.RestTemplate;
 
 @TestConfiguration
 class MockRestTemplateConfiguration {
-
     @MockBean
     private RestTemplate mockRestTemplate;
 }
