@@ -1,13 +1,19 @@
-FROM frekele/gradle:4.8-jdk8u172
+FROM gradle:8.6.0-jdk17-alpine AS build
+USER gradle
+WORKDIR /home/gradle/workdir
 
-ENV PROJECT=spring-boot-readiness
+COPY --chown=gradle:gradle build.gradle .
+COPY --chown=gradle:gradle settings.gradle .
+COPY --chown=gradle:gradle src src
 
-WORKDIR /gradle/${PROJECT}
-ADD . /gradle/${PROJECT}
+RUN gradle bootJar
 
-RUN gradle -g /gradle --info clean build && \
-    mv -v /gradle/${PROJECT}/build/libs/*.jar /root/app.jar && \
-    rm -rf /gradle/${PROJECT}
+FROM eclipse-temurin:17-jre-alpine
+VOLUME /tmp
+RUN addgroup app
+RUN adduser --no-create-home --ingroup app --disabled-password app
+COPY --chown=app:app --from=build /home/gradle/workdir/build/libs/*.jar /app/
 
-WORKDIR /root
-ENTRYPOINT ["java", "-jar", "/root/app.jar"]
+WORKDIR /app
+USER app
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "spring-boot-readiness.jar"]
