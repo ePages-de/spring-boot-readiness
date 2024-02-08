@@ -35,7 +35,6 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
     implementation('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
     implementation('org.apache.httpcomponents:httpclient')
-    implementation('com.google.guava:guava:21.0')
     implementation('org.springframework.data:spring-data-commons')
 
     compileOnly('org.projectlombok:lombok:1.18.30')

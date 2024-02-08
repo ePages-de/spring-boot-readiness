@@ -1,7 +1,5 @@
 package com.epages.readiness.sort;
 
-import com.google.common.collect.ImmutableList;
-
 import org.springframework.boot.actuate.health.Status;
 
 import java.util.Comparator;

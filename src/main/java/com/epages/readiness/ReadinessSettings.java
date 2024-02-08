@@ -1,7 +1,6 @@
 package com.epages.readiness;
 
-import static com.google.common.collect.Lists.newArrayList;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,7 +12,7 @@ import lombok.Data;
 public class ReadinessSettings {
     private String platform;
 
-    private List<HealthRequest> services = newArrayList();
+    private List<HealthRequest> services = new ArrayList<>();
 
     private int connectionTimeout = 5_000;
 

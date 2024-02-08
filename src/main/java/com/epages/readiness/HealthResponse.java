@@ -1,14 +1,12 @@
 package com.epages.readiness;
 
-import static com.google.common.collect.Maps.newLinkedHashMap;
 import static java.util.Collections.emptyMap;
-import static java.util.stream.Collectors.toList;
 import static lombok.AccessLevel.PRIVATE;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
 
 import org.springframework.boot.actuate.health.Status;
 
@@ -41,7 +39,7 @@ public class HealthResponse implements Response {
     }
 
     @Builder.Default
-    private Map<String, Object> details = newLinkedHashMap();
+    private Map<String, Object> details = new LinkedHashMap<>();
 
     @JsonCreator
     public HealthResponse(
