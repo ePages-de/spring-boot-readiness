@@ -1,34 +1,9 @@
-.navbar {
-    height: 70px;
+.jumbotron.down {
+  background-color: #f8d7da;
 }
 
+html,
+body,
 .content {
-    padding-top: 80px;
-}
-
-.label {
-    margin: 5px;
-    padding: 3px;
-    height: 100px;
-    width: 250px;
-    border-radius: .5em;
-    box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.5);
-}
-
-.jumbotron {
-    background-color: rgba(217, 83, 79, 0.5) !important;
-    box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.5);
-}
-
-.jumbotron.up {
-    background-color: rgba(92, 184, 92, 0.5) !important;
-}
-
-.jumbotron.degraded {
-    background-color: rgba(240, 173, 78, 0.5) !important;
-}
-
-.popover {
-   min-width: 50px;
-   max-width: 500px;
+  height: 100%;
 }

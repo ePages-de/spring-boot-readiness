@@ -16,13 +16,4 @@ public interface StatusCheck {
             default -> "danger";
         };
     }
-
-    @JsonIgnore
-    default String getGlyphIcon() {
-        return switch (getStatus().getCode()) {
-            case "UP" -> "glyphicon-ok";
-            case "DEGRADED" -> "glyphicon-warning-sign";
-            default -> "glyphicon-remove";
-        };
-    }
 }

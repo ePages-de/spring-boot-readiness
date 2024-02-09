@@ -48,7 +48,7 @@ public class ReadinessControllerTest {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(TEXT_HTML))
-                .andExpect(content().string(containsString("<tt>test platform</tt>")));
+                .andExpect(content().string(containsString("<h5 class=\"d-inline font-monospace\">test platform</h5>")));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class ReadinessControllerTest {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(TEXT_HTML))
-                .andExpect(content().string(containsString("<tt>test platform</tt>")));
+                .andExpect(content().string(containsString("<h5 class=\"d-inline font-monospace\">test platform</h5>")));
     }
 
     private void givenReadinessResponse() {
