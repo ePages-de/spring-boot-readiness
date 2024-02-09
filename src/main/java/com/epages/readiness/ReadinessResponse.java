@@ -49,9 +49,6 @@ public class ReadinessResponse implements Response {
     }
 
     static class ReadinessResponseBuilder {
-        // default needed for Lombok.
-        // Unfortunately Lombok's @Builder.Default breaks Jackson deserialization of HealthResponse
-        //private SimpleStatusAggregator healthAggregator = new SimpleStatusAggregator();
         ReadinessResponseBuilder combine(ReadinessResponseBuilder other) {
             return children(other.children);
         }
