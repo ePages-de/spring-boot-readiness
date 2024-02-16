@@ -4,6 +4,8 @@ import org.springframework.util.StopWatch;
 
 abstract class Timer {
 
+    private Timer() {}
+
     static StopWatch startTiming(String service) {
         StopWatch stopWatch = new StopWatch(service);
         stopWatch.start();

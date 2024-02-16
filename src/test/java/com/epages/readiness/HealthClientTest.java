@@ -7,6 +7,7 @@ import static org.springframework.boot.actuate.health.Status.UP;
 
 import java.util.List;
 
+import java.util.Map;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.epages.readiness.HealthResponse.ChildStatus;
-import com.google.common.collect.ImmutableMap;
 
 @ReadinessApplicationTest
 @RunWith(SpringRunner.class)
@@ -48,9 +48,9 @@ public class HealthClientTest {
         HealthResponse healthResponse = HealthResponse.builder()
                 .status(DOWN)
                 .request(settings.getServices().get(0))
-                .details(ImmutableMap.of(
-                        "foo", ImmutableMap.of("status", UP),
-                        "bar", ImmutableMap.of("status", UNKNOWN)
+                .details(Map.of(
+                        "foo", Map.of("status", UP),
+                        "bar", Map.of("status", UNKNOWN)
                         )
                 )
                 .build();

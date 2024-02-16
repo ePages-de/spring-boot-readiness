@@ -8,9 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthAggregator;
-import org.springframework.boot.actuate.health.OrderedHealthAggregator;
+import java.util.stream.Collectors;
+import org.springframework.boot.actuate.health.SimpleStatusAggregator;
 import org.springframework.boot.actuate.health.Status;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -29,7 +28,8 @@ public class ReadinessResponse implements Response {
     private Long totalTimeMillis;
 
     @Getter(value = NONE)
-    private HealthAggregator healthAggregator;
+    @Builder.Default
+    private final SimpleStatusAggregator healthAggregator = new SimpleStatusAggregator();
 
     @JsonIgnore
     @Singular("child")
@@ -43,19 +43,12 @@ public class ReadinessResponse implements Response {
 
     @Override
     public Status getStatus() {
-        Map<String, Health> healths = children.stream()
-                .collect(toMap(
-                        HealthResponse::getService,
-                        healthResponse -> new Health.Builder().status(healthResponse.getStatus()).build()
-                ));
-
-        return healthAggregator.aggregate(healths).getStatus();
+        return healthAggregator.getAggregateStatus(
+            children.stream().map(HealthResponse::getStatus).collect(Collectors.toSet())
+        );
     }
 
     static class ReadinessResponseBuilder {
-        // default needed for Lombok.
-        // Unfortunately Lombok's @Builder.Default breaks Jackson deserialization of HealthResponse
-        private HealthAggregator healthAggregator = new OrderedHealthAggregator();
         ReadinessResponseBuilder combine(ReadinessResponseBuilder other) {
             return children(other.children);
         }

@@ -13,8 +13,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import lombok.SneakyThrows;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Matchers.anyObject;
 import static org.springframework.boot.actuate.health.Status.UP;
 import static org.springframework.http.MediaType.TEXT_HTML;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -48,7 +48,7 @@ public class ReadinessControllerTest {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(TEXT_HTML))
-                .andExpect(content().string(containsString("<tt>test platform</tt>")));
+                .andExpect(content().string(containsString("<h5 class=\"d-inline font-monospace\">test platform</h5>")));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class ReadinessControllerTest {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(TEXT_HTML))
-                .andExpect(content().string(containsString("<tt>test platform</tt>")));
+                .andExpect(content().string(containsString("<h5 class=\"d-inline font-monospace\">test platform</h5>")));
     }
 
     private void givenReadinessResponse() {
@@ -77,6 +77,6 @@ public class ReadinessControllerTest {
                 .platform("test platform")
                 .child(health)
                 .build();
-        willReturn(readiness).given(mockReadinessClient).getReadiness(anyObject());
+        willReturn(readiness).given(mockReadinessClient).getReadiness(any());
     }
 }

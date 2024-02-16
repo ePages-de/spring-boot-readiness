@@ -6,19 +6,21 @@ import static org.springframework.boot.actuate.health.Status.OUT_OF_SERVICE;
 import static org.springframework.boot.actuate.health.Status.UNKNOWN;
 import static org.springframework.boot.actuate.health.Status.UP;
 
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.boot.actuate.health.OrderedHealthAggregator;
+import org.springframework.boot.actuate.health.SimpleStatusAggregator;
 import org.springframework.boot.actuate.health.Status;
 
 public class ReadinessResponseTest {
 
-    private OrderedHealthAggregator healthAggregator;
+    private SimpleStatusAggregator healthAggregator;
 
     @Before
     public void setup() {
-        healthAggregator = new OrderedHealthAggregator();
-        healthAggregator.setStatusOrder(DOWN, OUT_OF_SERVICE, UNKNOWN, new Status("DEGRADED"), UP);
+        healthAggregator = new SimpleStatusAggregator(
+            DOWN, OUT_OF_SERVICE, UNKNOWN, new Status("DEGRADED"), UP
+        );
     }
 
     @Test

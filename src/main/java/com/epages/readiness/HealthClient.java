@@ -2,7 +2,6 @@ package com.epages.readiness;
 
 import static com.epages.readiness.Timer.startTiming;
 import static com.epages.readiness.Timer.stopTiming;
-import static com.google.common.base.Throwables.getRootCause;
 import static org.springframework.boot.actuate.health.Status.DOWN;
 
 import java.net.URI;
@@ -39,8 +38,16 @@ public class HealthClient {
             // TODO let Jackson directly deserialize into HealthResponseBuilder
             return restTemplate.getForObject(uri, HealthResponse.class).toBuilder();
         } catch (RestClientException e) {
-            Status status = new Status(DOWN.getCode(), getRootCause(e).getMessage());
+            Status status = new Status(DOWN.getCode(), getRootCauseMessage(e));
             return HealthResponse.builder().status(status);
         }
+    }
+
+    private static String getRootCauseMessage(Throwable throwable) {
+        Throwable cause;
+        while ((cause = throwable.getCause()) != null) {
+            throwable = cause;
+        }
+        return throwable.getMessage();
     }
 }

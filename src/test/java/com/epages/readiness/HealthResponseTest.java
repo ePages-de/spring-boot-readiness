@@ -18,30 +18,32 @@ public class HealthResponseTest {
         // GIVEN
         ObjectMapper objectMapper = new ObjectMapper();
         //language=JSON
-        String json = "{\n" +
-                "  \"details\": {\n" +
-                "    \"db\": {\n" +
-                "      \"details\": {\n" +
-                "        \"database\": \"MySQL\",\n" +
-                "        \"hello\": 1\n" +
-                "      },\n" +
-                "      \"status\": \"UP\"\n" +
-                "    },\n" +
-                "    \"hystrix\": {\n" +
-                "      \"status\": \"UP\"\n" +
-                "    },\n" +
-                "    \"rabbit\": {\n" +
-                "      \"details\": {\n" +
-                "        \"version\": \"3.6.9\"\n" +
-                "      },\n" +
-                "      \"status\": \"UP\"\n" +
-                "    },\n" +
-                "    \"refreshScope\": {\n" +
-                "      \"status\": \"UP\"\n" +
-                "    }\n" +
-                "  },\n" +
-                "  \"status\": \"UP\"\n" +
-                "}\n";
+        String json = """
+            {
+              "details": {
+                "db": {
+                  "details": {
+                    "database": "MySQL",
+                    "hello": 1
+                  },
+                  "status": "UP"
+                },
+                "hystrix": {
+                  "status": "UP"
+                },
+                "rabbit": {
+                  "details": {
+                    "version": "3.6.9"
+                  },
+                  "status": "UP"
+                },
+                "refreshScope": {
+                  "status": "UP"
+                }
+              },
+              "status": "UP"
+            }
+            """;
 
         // WHEN
         HealthResponse healthResponse = objectMapper.readValue(json, HealthResponse.class);

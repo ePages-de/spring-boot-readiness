@@ -1,97 +1,131 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns="http://www.w3.org/1999/xhtml"
+  data-bs-theme="dark"
+>
+  <head>
+    <title th:text="${readiness.platform} + ' Readiness Check'"></title>
+    <!-- /* @thymesVar id="refresh" type="Integer" */ -->
+    <meta
+      http-equiv="refresh"
+      th:attr="content=${refresh}"
+      th:unless="${refresh == null}"
+    />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/readiness.css" />
+  </head>
 
-<head>
-    <title>Platform Readiness Check</title>
-    <!--@thymesVar id="refresh" type="Integer"-->
-    <meta http-equiv="refresh" th:attr="content=${refresh}"
-          th:unless="${refresh == null}"/>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
-    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap-theme.min.css"/>
-    <link rel="stylesheet" href="/css/readiness.css"/>
-    <script src="/webjars/jquery/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-</head>
-
-<body role="document">
-
-<!--@thymesVar id="readiness" type="com.epages.readiness.ReadinessResponse"-->
-<header>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <div class="navbar-brand">
-                    <a href="#"><img src="/readiness-360x200.png" height="50" /></a>
-                    <tt th:text="${readiness.platform}">platform</tt>
-                    <span class="glyphicon"
-                          th:classappend="|${readiness.glyphIcon} ${'text-' + readiness.cssClass}|"></span>
-                    <small>(<span th:text="${readiness.totalTimeMillis}">1234</span> ms)</small>
-                </div>
-            </div>
+  <body role="document">
+    <!-- /* @thymesVar id="readiness" type="com.epages.readiness.ReadinessResponse" */-->
+    <header>
+      <nav class="navbar">
+        <div class="container-xl">
+          <a class="navbar-brand" href="/">
+            <img
+              src="/readiness-360x200.png"
+              height="50"
+              class="d-inline-block"
+            />
+            <h5 class="d-inline font-monospace" th:text="${readiness.platform}">
+              platform
+            </h5>
+            <small
+              th:class="${readiness.status.code} == 'UP' ? 'text-success' : 'text-danger'"
+            >
+              (<span th:text="${readiness.totalTimeMillis}">1234</span> ms)
+            </small>
+          </a>
         </div>
-    </nav>
-</header>
+      </nav>
+    </header>
 
-<div class="content container">
-    <div class="jumbotron" th:classappend="${#strings.toLowerCase(readiness.status.code)}">
-        <div class="container">
-            <div class="row">
-                <div th:each="health : ${readiness.children}" class="col-xs-2 col-md-2 col-lg-2 label"
-                     th:classappend="${'label-' + health.cssClass}"
-                     data-toggle="popover"
-                     th:attr="data-popover-content=${'#popover-' + health.service}"
+    <div class="content container-xl">
+      <div
+        class="jumbotron pt-2 pb-2"
+        th:classappend="${#strings.toLowerCase(readiness.status.code)}"
+      >
+        <div class="container-xl">
+          <div
+            class="row row-cols-4 row-cols-sm-3 rows-cols-md-4 justify-content-center"
+          >
+            <div
+              th:each="health : ${readiness.children}"
+              class="col-md-auto badge m-2"
+              th:classappend="${'bg-' + health.cssClass}"
+              th:data-bs-toggle="${health.status.code == 'UP' ? '' : 'popover'}"
+            >
+              <h5 class="mt-1">
+                <span th:text="${health.service}">service</span><br />
+                <small class="text-muted"
+                  >(<span th:text="${health.totalTimeMillis}">926</span>
+                  ms)</small
                 >
-                    <div class="hidden" th:attr="id=${'popover-' + health.service}">
-                        <div class="popover-heading">
-                            <span class="glyphicon"
-                                  th:classappend="| ${'text-' + health.cssClass} ${health.glyphIcon}|"></span>
-                            <span th:text="${health.service}">name</span>
-                            <small>(<span th:text="${health.totalTimeMillis}">1234</span> ms)
-                            </small>
-                        </div>
-                        <div class="popover-body">
-                            <div th:each="childStatus : ${health.childrenStatus}">
-                                <span class="glyphicon"
-                                      th:classappend="|${childStatus.glyphIcon} ${'text-' + childStatus.cssClass}|"></span>
-                                <span th:text="${childStatus.name}">name</span>
-                            </div>
-                            <div th:unless="${#strings.isEmpty(health.status.description)}">
-                                <span th:text="${health.status.description}">description</span>
-                            </div>
-                        </div>
-                    </div>
-                    <h4>
-                        <span th:text="${health.service}">service</span>
-                    </h4>
-                    <h2>
-                        <span class="glyphicon"
-                              th:classappend="${health.glyphIcon}"></span>
-                        <small>(<span th:text="${health.totalTimeMillis}">926</span> ms)</small>
-                    </h2>
+              </h5>
+              <div class="visually-hidden">
+                <div class="popover-heading">
+                  <span
+                    th:class="${'text-' + health.cssClass}"
+                    th:text="${health.service}"
+                    >name</span
+                  >
+                  <small th:class="${'text-' + health.cssClass}">
+                    (<span th:text="${health.totalTimeMillis}">1234</span> ms)
+                  </small>
                 </div>
+                <div class="popover-content">
+                  <div th:each="childStatus : ${health.childrenStatus}">
+                    <span
+                      th:text="${childStatus.name}"
+                      class="${'text-' + health.cssClass}"
+                      >name</span
+                    >
+                  </div>
+                  <div
+                    th:unless="${#strings.isEmpty(health.status.description)}"
+                  >
+                    <span th:text="${health.status.description}"
+                      >description</span
+                    >
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
 
-<script>
-$(function(){
-    $("[data-toggle=popover]").popover({
-        html: true,
-        trigger: "hover",
-        placement: "auto",
-        content: function() {
-          var content = $(this).attr("data-popover-content");
-          return $(content).children(".popover-body").html();
-        },
-        title: function() {
-          var title = $(this).attr("data-popover-content");
-          return $(title).children(".popover-heading").html();
-        }
-    });
-});
-</script>
+    <footer
+      class="container-xl d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"
+    >
+      <div class="col-md-4 d-flex align-items-center">
+        <span class="text-muted">
+          <img
+            src="/readiness-360x200.png"
+            height="30"
+            class="d-inline-block"
+          />
+          <span th:text="${readiness.platform}"></span>
+          <span
+            th:class="${readiness.status.code} == 'UP' ? 'text-success' : 'text-danger'"
+          >
+            (<span th:text="${readiness.totalTimeMillis}">1234</span> ms)
+          </span>
+        </span>
+      </div>
+      <div class="col-md-4 justify-content-end d-flex">
+        <button
+          class="btn btn-secondary mb-3 me-2 mb-md-0"
+          id="color-mode-selector"
+        >
+          Enable Light Mode
+        </button>
+      </div>
+    </footer>
 
-</body>
+    <script src="/webjars/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/readiness.js"></script>
+  </body>
 </html>

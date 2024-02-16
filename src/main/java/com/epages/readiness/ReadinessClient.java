@@ -6,7 +6,7 @@ import static com.epages.readiness.sort.SortConfiguration.SORT_BY_SERVICE;
 
 import java.util.Comparator;
 
-import org.springframework.boot.actuate.health.HealthAggregator;
+import org.springframework.boot.actuate.health.SimpleStatusAggregator;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
@@ -22,7 +22,7 @@ public class ReadinessClient {
 
     private final HealthClient healthClient;
 
-    private final HealthAggregator healthAggregator;
+    private final SimpleStatusAggregator healthAggregator;
 
     public ReadinessResponse getReadiness() {
         return getReadiness(SORT_BY_SERVICE);
