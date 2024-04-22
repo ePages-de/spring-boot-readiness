@@ -1,10 +1,10 @@
 package com.epages.readiness;
 
-import com.google.common.collect.ImmutableMap;
-
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
+import java.util.Map;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.actuate.health.SimpleStatusAggregator;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -26,7 +26,12 @@ public class ReadinessApplication {
     public CommandLineRunner commandLineRunner(ReadinessClient readinessClient) {
         return args -> {
             ReadinessResponse readiness = readinessClient.getReadiness();
-            log.info(new YAMLMapper().writeValueAsString(ImmutableMap.of("readiness", readiness)));
+            log.info(new YAMLMapper().writeValueAsString(Map.of("readiness", readiness)));
         };
+    }
+
+    @Bean
+    public SimpleStatusAggregator healthAggregator() {
+        return new SimpleStatusAggregator();
     }
 }

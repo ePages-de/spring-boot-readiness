@@ -1,32 +1,26 @@
-gradle:
-  image: busybox
-  command: /bin/true
-  volumes:
-    - /gradle
-    - /tmp
+version: "3.8"
+services:
+  readiness:
+    build: .
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    volumes:
+      - "${PWD}/config:/app/config"
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xmx256m -Xss512k -Dfile.encoding=UTF-8 -XX:+UseCompressedOops -XX:+PrintCommandLineFlags
 
-readiness:
-  build: .
-  mem_limit: 256m
-  volumes:
-    - "${PWD}/config:/root/config"
-  environment:
-    - JAVA_TOOL_OPTIONS=-Xmx256m -Xss512k -Dfile.encoding=UTF-8 -XX:+UseCompressedOops -XX:+PrintCommandLineFlags
+  cli:
+    extends:
+      service: readiness
+    environment:
+      - SPRING_PROFILES_ACTIVE=cli
 
-cli:
-  extends:
-    service: readiness
-  volumes_from:
-    - gradle
-  environment:
-    - SPRING_PROFILES_ACTIVE=cli
-
-dashboard:
-  extends:
-    service: readiness
-  ports:
-    - "2112:2112"
-  volumes_from:
-    - gradle
-  environment:
-    - SPRING_PROFILES_ACTIVE=dashboard
+  dashboard:
+    extends:
+      service: readiness
+    ports:
+      - "2112:2112"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dashboard

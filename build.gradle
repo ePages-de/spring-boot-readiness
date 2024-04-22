@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.6.RELEASE'
+        springBootVersion = '2.7.18'
     }
     repositories {
         mavenCentral()
@@ -17,36 +17,39 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 jar {
-    baseName = "${rootProject.name}"
-    version = 'DEV-SNAPSHOT'
+    enabled = false
 }
 
-sourceCompatibility = 1.8
+java {
+    sourceCompatibility = 17
+    targetCompatibility = 17
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework.boot:spring-boot-starter-actuator')
-    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
-    compile('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
-    compile('org.apache.httpcomponents:httpclient')
-    compile('com.google.guava:guava:21.0')
-    compile('org.springframework.data:spring-data-commons')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-actuator')
+    implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+    implementation('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
+    implementation('org.apache.httpcomponents:httpclient')
+    implementation('org.springframework.data:spring-data-commons')
 
-    compileOnly('org.projectlombok:lombok:1.18.2')
-    runtime('org.webjars:webjars-locator:0.34')
-    runtime('org.webjars:bootstrap:3.3.7-1')
-    runtime('org.webjars:jquery:3.1.1-1')
-    runtime('org.springframework.boot:spring-boot-devtools')
+    compileOnly('org.projectlombok:lombok')
+    runtimeOnly('org.webjars:webjars-locator-core')
+    runtimeOnly('org.webjars:bootstrap:5.3.2')
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
 
-    testCompile('junit:junit')
-    testCompile('org.assertj:assertj-core:3.4.1')
-    testCompile('org.mockito:mockito-core')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompileOnly('org.projectlombok:lombok:1.18.2')
+    testImplementation('junit:junit')
+    testImplementation('org.assertj:assertj-core')
+    testImplementation('org.mockito:mockito-core')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testCompileOnly('org.projectlombok:lombok')
+
+    annotationProcessor('org.projectlombok:lombok')
+    testAnnotationProcessor('org.projectlombok:lombok')
 }
 
 bootRun {
