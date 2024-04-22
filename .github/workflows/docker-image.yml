@@ -1,0 +1,91 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches: [ master, '*-test' ]
+  pull_request:
+    branches: [ '*' ]
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build / push / tag image 🐳
+    if: ${{ (github.repository == 'ePages-de/spring-boot-readiness') && (!contains(github.event.head_commit.message, 'skip ci')) }}
+    runs-on: ubuntu-latest
+    outputs:
+      docker-image: ${{ steps.generate-build-variables.outputs.docker-image }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # checkout everything.
+
+      - name: Generate build timestamps
+        id: generate-build-variables
+        run: |
+          BUILD_TIME=$(date '+%s')
+          BUILD_TIMESTAMP=$(date '+%Y%m%d%H%M%S' -d "@$BUILD_TIME")
+          DOCKER_TAG=$(date '+%Y.%m.%d-%H.%M.%S' -d "@$BUILD_TIME")
+          echo "timestamp=$BUILD_TIMESTAMP" >> $GITHUB_ENV
+          echo "docker-image=epages/${{ github.event.repository.name }}:$DOCKER_TAG" >> $GITHUB_ENV
+          echo "docker-image=$DOCKER_TAG" >> $GITHUB_OUTPUT
+
+      - name: Build image
+        run: |
+          echo "Building image ${{ env.docker-image }}"
+          docker build . --file Dockerfile --tag ${{ env.docker-image }}
+
+      ### THE FOLLOWING STEPS ARE FOR MASTER BUILDS ONLY
+
+      - name: Login to Docker Hub
+        if: github.ref == 'refs/heads/master'
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.BYD_DOCKERHUB_USER }}
+          password: ${{ secrets.BYD_DOCKERHUB_PASSWORD }}
+
+      - name: Push Image
+        if: github.ref == 'refs/heads/master'
+        run: |
+          echo "Pushing image ${{ env.docker-image }}"
+          docker push ${{ env.docker-image }}
+
+      - name: Tag Image as Latest
+        if: github.ref == 'refs/heads/master'
+        run: |
+          echo "Tagging image ${{ env.docker-image }} as latest"
+          docker tag ${{ env.docker-image }} epages/${{ github.event.repository.name }}:latest
+          docker push epages/${{ github.event.repository.name }}:latest
+
+  vulnerability-scan:
+    needs: build
+    name: Scan for vulnerabilities 🚨
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'docker.io/epages/${{ github.event.repository.name }}:${{ needs.build.outputs.docker-image }}'
+          format: 'table'
+          exit-code: '1' # Fails if any vulnerabilities are found.
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+          output: 'vulnerabilities.file'
+          trivyignores: '.trivyignore'
+        env:
+          TRIVY_USERNAME: ${{ secrets.BYD_DOCKERHUB_USER }}
+          TRIVY_PASSWORD: ${{ secrets.BYD_DOCKERHUB_PASSWORD }}
+      - name: Save vulnerability report
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: vulnerability-report
+          path: 'vulnerabilities.file'
+          retention-days: 5
+      - name: Print vulnerability report
+        if: always()
+        run: |
+          cat vulnerabilities.file
