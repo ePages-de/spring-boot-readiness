@@ -18,7 +18,7 @@ jobs:
     outputs:
       docker-image: ${{ steps.generate-build-variables.outputs.docker-image }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # checkout everything.
 
@@ -65,7 +65,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'docker.io/epages/${{ github.event.repository.name }}:${{ needs.build.outputs.docker-image }}'
