@@ -47,13 +47,13 @@ jobs:
           password: ${{ secrets.BYD_DOCKERHUB_PASSWORD }}
 
       - name: Push Image
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, 'skip cd')
         run: |
           echo "Pushing image ${{ env.docker-image }}"
           docker push ${{ env.docker-image }}
 
       - name: Tag Image as Latest
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, 'skip cd')
         run: |
           echo "Tagging image ${{ env.docker-image }} as latest"
           docker tag ${{ env.docker-image }} epages/${{ github.event.repository.name }}:latest
