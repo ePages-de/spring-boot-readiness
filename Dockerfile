@@ -1,4 +1,4 @@
-FROM gradle:8.6.0-jdk17-alpine AS build
+FROM gradle:8.10.2-jdk21-alpine AS build
 USER gradle
 WORKDIR /home/gradle/workdir
 
@@ -8,7 +8,7 @@ COPY --chown=gradle:gradle src src
 
 RUN gradle bootJar
 
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 VOLUME /tmp
 RUN addgroup app
 RUN adduser --no-create-home --ingroup app --disabled-password app
