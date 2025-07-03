@@ -3,8 +3,8 @@ package com.epages.readiness.sort;
 import com.epages.readiness.HealthRequest;
 import com.epages.readiness.HealthResponse;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 
@@ -19,17 +19,17 @@ import static org.springframework.boot.actuate.health.Status.UP;
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
-public class SortCompareTest {
+class SortCompareTest {
 
     private SortCompare sortCompare;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         sortCompare = new SortConfiguration().sortCompare();
     }
 
     @Test
-    public void should_sort_health_responses() {
+    void should_sort_health_responses() {
         // GIVEN
         Sort sort = Sort.by(
             new Order(ASC, "status"), new Order(DESC, "totalTimeMillis"), new Order(ASC, "service")

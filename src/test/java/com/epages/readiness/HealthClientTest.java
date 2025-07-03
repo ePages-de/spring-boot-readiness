@@ -8,21 +8,22 @@ import static org.springframework.boot.actuate.health.Status.UP;
 import java.util.List;
 
 import java.util.Map;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.epages.readiness.HealthResponse.ChildStatus;
 
 @ReadinessApplicationTest
-@RunWith(SpringRunner.class)
-public class HealthClientTest {
+@ExtendWith(SpringExtension.class)
+class HealthClientTest {
 
-    @Rule
+    @RegisterExtension
     @Autowired
-    public MockRestTemplateRule mockRestTemplateRule;
+    private MockRestTemplateExtension mockRestTemplateExtension;
 
     @Autowired
     private ReadinessSettings settings;
@@ -31,9 +32,9 @@ public class HealthClientTest {
     private HealthClient healthClient;
 
     @Test
-    public void should_get_health() {
+    void should_get_health() {
         // GIVEN
-        HealthRequest request = settings.getServices().get(0);
+        HealthRequest request = settings.getServices().getFirst();
 
         // WHEN
         HealthResponse healthResponse = healthClient.getHealth(request);
@@ -43,11 +44,11 @@ public class HealthClientTest {
     }
 
     @Test
-    public void should_get_children_status() {
+    void should_get_children_status() {
         // GIVEN
         HealthResponse healthResponse = HealthResponse.builder()
                 .status(DOWN)
-                .request(settings.getServices().get(0))
+                .request(settings.getServices().getFirst())
                 .details(Map.of(
                         "foo", Map.of("status", UP),
                         "bar", Map.of("status", UNKNOWN)
@@ -65,7 +66,7 @@ public class HealthClientTest {
     }
 
     @Test
-    public void should_handle_exception() {
+    void should_handle_exception() {
         // GIVEN
         HealthRequest request = new HealthRequest("exception", "https://host.invalid/EXCEPTION");
 

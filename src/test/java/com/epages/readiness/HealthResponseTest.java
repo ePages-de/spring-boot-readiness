@@ -1,20 +1,19 @@
 package com.epages.readiness;
 
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.springframework.boot.actuate.health.Status.UP;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.SneakyThrows;
 
-public class HealthResponseTest {
+class HealthResponseTest {
 
     @Test
     @SneakyThrows
-    public void should_deserialize_json() {
+    void should_deserialize_json() {
         // GIVEN
         ObjectMapper objectMapper = new ObjectMapper();
         //language=JSON
@@ -50,7 +49,7 @@ public class HealthResponseTest {
 
         // THEN
         then(healthResponse.getStatus()).isEqualTo(UP);
-        then(healthResponse.getChildrenStatus().stream().map(HealthResponse.ChildStatus::getName).collect(toList())).containsOnly("db", "hystrix", "rabbit", "refreshScope");
-        then(healthResponse.getChildrenStatus().stream().map(s -> s.getStatus().getCode()).collect(toList())).containsOnly("UP", "UP", "UP", "UP");
+        then(healthResponse.getChildrenStatus().stream().map(HealthResponse.ChildStatus::getName).toList()).containsOnly("db", "hystrix", "rabbit", "refreshScope");
+        then(healthResponse.getChildrenStatus().stream().map(s -> s.getStatus().getCode()).toList()).containsOnly("UP", "UP", "UP", "UP");
     }
 }
