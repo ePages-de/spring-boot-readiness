@@ -5,12 +5,14 @@ import java.util.List;
 
 import javax.net.ssl.SSLContext;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContexts;
-import org.apache.http.ssl.TrustStrategy;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
+import org.apache.hc.core5.ssl.SSLContexts;
+import org.apache.hc.core5.ssl.TrustStrategy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,9 +38,13 @@ public class RestTemplateConfiguration {
         // http://stackoverflow.com/a/41618092/1393467
         TrustStrategy trustStrategy = (X509Certificate[] chain, String authType) -> true;
         SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, trustStrategy).build();
-        return configure(HttpClients.custom(), userAgent)
-                .setSSLSocketFactory(new SSLConnectionSocketFactory(sslContext))
-                .build();
+
+        return configure(
+                HttpClients.custom(),
+                userAgent,
+                SSLConnectionSocketFactoryBuilder.create()
+                    .setSslContext(sslContext).build()
+        ).build();
     }
 
     @Bean("httpClient")
@@ -48,18 +54,29 @@ public class RestTemplateConfiguration {
     }
 
     private HttpClientBuilder configure(HttpClientBuilder builder, String userAgent) {
+        return configure(builder, userAgent, null);
+    }
+
+    private HttpClientBuilder configure(HttpClientBuilder builder, String userAgent, SSLConnectionSocketFactory sslSocketFactory) {
+
+        PoolingHttpClientConnectionManagerBuilder connectionManagerBuilder = PoolingHttpClientConnectionManagerBuilder.create()
+            .setMaxConnTotal(settings.getServices().size())
+            .setMaxConnPerRoute(settings.getServices().size());
+
+        if (sslSocketFactory != null) {
+            connectionManagerBuilder.setSSLSocketFactory(sslSocketFactory);
+        }
+
         return builder
                 .setUserAgent(userAgent)
                 .disableAutomaticRetries()
-                .setMaxConnTotal(settings.getServices().size())
-                .setMaxConnPerRoute(settings.getServices().size());
+                .setConnectionManager(connectionManagerBuilder.build());
     }
 
     @Bean
     public ClientHttpRequestFactory clientHttpRequestFactory(HttpClient httpClient) {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
         factory.setConnectTimeout(settings.getConnectionTimeout());
-        factory.setReadTimeout(settings.getReadTimeout());
         factory.setConnectionRequestTimeout(settings.getConnectionRequestTimeout());
         return factory;
     }

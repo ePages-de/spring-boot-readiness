@@ -1,12 +1,12 @@
 package com.epages.readiness;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -23,8 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ReadinessController.class)
 @ActiveProfiles({"test", "dashboard"})
-@RunWith(SpringRunner.class)
-public class ReadinessControllerTest {
+@ExtendWith(SpringExtension.class)
+class ReadinessControllerTest {
 
     @MockBean
     private ReadinessClient mockReadinessClient;
@@ -34,7 +34,7 @@ public class ReadinessControllerTest {
 
     @Test
     @SneakyThrows
-    public void should_render_dashboard_using_custom_sorting() {
+    void should_render_dashboard_using_custom_sorting() {
         // GIVEN
         givenReadinessResponse();
 
@@ -53,7 +53,7 @@ public class ReadinessControllerTest {
 
     @Test
     @SneakyThrows
-    public void should_render_dashboard_using_default_sorting() {
+    void should_render_dashboard_using_default_sorting() {
         // GIVEN
         givenReadinessResponse();
 

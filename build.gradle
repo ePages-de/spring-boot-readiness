@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.7.18'
+        springBootVersion = '3.3.13'
     }
     repositories {
         mavenCentral()
@@ -34,17 +34,14 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
     implementation('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
-    implementation('org.apache.httpcomponents:httpclient')
+    implementation('org.apache.httpcomponents.client5:httpclient5')
     implementation('org.springframework.data:spring-data-commons')
 
     compileOnly('org.projectlombok:lombok')
     runtimeOnly('org.webjars:webjars-locator-core')
-    runtimeOnly('org.webjars:bootstrap:5.3.3')
+    runtimeOnly('org.webjars:bootstrap:5.3.7')
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
 
-    testImplementation('junit:junit')
-    testImplementation('org.assertj:assertj-core')
-    testImplementation('org.mockito:mockito-core')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     testCompileOnly('org.projectlombok:lombok')
 
@@ -54,4 +51,8 @@ dependencies {
 
 bootRun {
     systemProperties System.properties
+}
+
+test {
+    useJUnitPlatform()
 }

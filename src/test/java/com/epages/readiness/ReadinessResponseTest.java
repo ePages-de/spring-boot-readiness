@@ -6,25 +6,24 @@ import static org.springframework.boot.actuate.health.Status.OUT_OF_SERVICE;
 import static org.springframework.boot.actuate.health.Status.UNKNOWN;
 import static org.springframework.boot.actuate.health.Status.UP;
 
-import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.actuate.health.SimpleStatusAggregator;
 import org.springframework.boot.actuate.health.Status;
 
-public class ReadinessResponseTest {
+class ReadinessResponseTest {
 
     private SimpleStatusAggregator healthAggregator;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         healthAggregator = new SimpleStatusAggregator(
             DOWN, OUT_OF_SERVICE, UNKNOWN, new Status("DEGRADED"), UP
         );
     }
 
     @Test
-    public void should_handle_degraded() {
+    void should_handle_degraded() {
         // GIVEN
         HealthResponse up = HealthResponse.builder()
                 .request(new HealthRequest("A", "http://a"))

@@ -3,19 +3,19 @@ package com.epages.readiness;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.springframework.boot.actuate.health.Status.DOWN;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ReadinessApplicationTest
-@RunWith(SpringRunner.class)
-public class ReadinessClientTest {
+@ExtendWith(SpringExtension.class)
+class ReadinessClientTest {
 
-    @Rule
+    @RegisterExtension
     @Autowired
-    public MockRestTemplateRule mockRestTemplateRule;
+    private MockRestTemplateExtension mockRestTemplateExtension;
 
     @Autowired
     private ReadinessClient readinessClient;
@@ -24,7 +24,7 @@ public class ReadinessClientTest {
     private ReadinessSettings settings;
 
     @Test
-    public void should_retrieve_health_checks() {
+    void should_retrieve_health_checks() {
         // WHEN
         ReadinessResponse response = readinessClient.getReadiness();
 
